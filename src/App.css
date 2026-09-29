@@ -1,0 +1,43 @@
+.shell {
+  position: relative;
+  overflow-x: clip; /* safety net: nothing can widen the page sideways */
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.shell--in { opacity: 1; }
+
+/* vertical blueprint rules behind everything */
+.rules {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gut);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+.rules > span { border-left: 1px solid rgba(18, 18, 15, 0.055); }
+.rules > span:last-child { border-right: 1px solid rgba(18, 18, 15, 0.055); }
+
+main { position: relative; z-index: 1; }
+
+.skip {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 10001;
+  padding: 12px 18px;
+  background: var(--ink);
+  color: var(--on-accent);
+  background: var(--yellow);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+.skip:focus { left: 12px; top: 12px; }
+
+@media (max-width: 720px) {
+  .rules { grid-template-columns: repeat(2, 1fr); }
+}

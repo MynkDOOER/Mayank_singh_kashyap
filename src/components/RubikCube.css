@@ -1,0 +1,232 @@
+.rubik {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  user-select: none;
+}
+
+/* ---------- top bar ---------- */
+.rk-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 2px 14px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-40);
+}
+.rk-tag {
+  padding: 3px 7px;
+  border: 1px solid var(--ink-14);
+  border-radius: 3px;
+  color: var(--ink-60);
+}
+.rk-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-60);
+  font-variant-numeric: tabular-nums;
+}
+.rk-state > i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--yellow);
+}
+.rk-state--solved { color: var(--ink); }
+.rk-state--solved > i { background: var(--green); box-shadow: 0 0 0 3px rgba(31, 163, 74, 0.2); }
+.rk-state--scrambling > i,
+.rk-state--solving > i { animation: rk-blink 0.7s steps(2, start) infinite; }
+@keyframes rk-blink { to { visibility: hidden; } }
+.rk-angle {
+  margin-left: auto;
+  white-space: pre;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-40);
+}
+
+/* ---------- stage ---------- */
+.rubik__stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 0.86;
+  display: grid;
+  place-items: center;
+  perspective: 1400px;
+  perspective-origin: 50% 42%;
+  cursor: grab;
+  touch-action: none;
+  outline: none;
+  border-radius: 4px;
+}
+.rubik__stage:focus-visible { box-shadow: inset 0 0 0 1px var(--yellow); }
+.rubik__stage.is-grabbing { cursor: grabbing; }
+
+.rubik__scene {
+  position: relative;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* a grid plate under the cube, in the same 3D space, so it turns with it */
+.rubik__floor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-image:
+    linear-gradient(rgba(var(--ink-rgb), 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--ink-rgb), 0.14) 1px, transparent 1px);
+  background-size: 10% 10%;
+  border: 1px solid rgba(var(--ink-rgb), 0.2);
+  -webkit-mask-image: radial-gradient(circle at center, #000 30%, transparent 72%);
+          mask-image: radial-gradient(circle at center, #000 30%, transparent 72%);
+  pointer-events: none;
+}
+
+.cubie {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.cubie__face {
+  position: absolute;
+  inset: 0;
+  border-radius: calc(var(--cs) * 0.13);
+  backface-visibility: hidden;
+  box-shadow: inset 0 0 0 1.5px #050505;
+}
+.cubie__face.is-sticker {
+  box-shadow:
+    inset 0 0 0 2px #050505,
+    inset 0 calc(var(--cs) * -0.14) 0 rgba(0, 0, 0, 0.14),
+    inset 0 calc(var(--cs) * 0.1) 0 rgba(255, 255, 255, 0.24);
+}
+
+/* ---------- move log + last-move flash ---------- */
+.rk-log {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-width: 70%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+}
+.rk-log li {
+  min-width: 26px;
+  padding: 3px 6px;
+  border: 1px solid var(--ink-14);
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  text-align: center;
+  color: var(--ink-40);
+}
+.rk-log li.is-last { color: var(--ink); border-color: var(--ink-40); }
+.rk-log .rk-log__more { border-style: dashed; }
+
+.rk-last {
+  position: absolute;
+  right: 4px;
+  bottom: -6px;
+  font-family: var(--display);
+  font-size: clamp(34px, 4vw, 52px);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--ink-14);
+  pointer-events: none;
+  animation: rk-flash 0.5s var(--ease-out);
+}
+@keyframes rk-flash {
+  from { color: var(--yellow); transform: translateY(-6px); }
+}
+
+/* ---------- controls ---------- */
+.rk-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--ink-14);
+}
+
+.rk-faces { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.rk-face,
+.rk-prime {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 42px;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--ink-14);
+  border-radius: 4px;
+  background: var(--paper-3);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  transition: transform 0.15s var(--ease-cube), border-color 0.2s, background 0.2s;
+}
+.rk-face i {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: var(--c);
+  box-shadow: 0 0 0 1px #050505;
+}
+.rk-face sup { font-size: 11px; margin-left: -4px; }
+.rk-face:hover:not(:disabled),
+.rk-prime:hover:not(:disabled) { border-color: var(--ink-40); transform: translateY(-2px); }
+.rk-face:active:not(:disabled) { transform: translateY(1px); }
+.rk-prime { font-size: 15px; font-weight: 500; }
+.rk-prime.is-on { background: var(--yellow); color: var(--on-accent); border-color: var(--yellow); }
+
+.rk-actions { display: flex; gap: 8px; }
+.rk-btn {
+  height: 36px;
+  padding: 0 16px;
+  border: 1px solid rgba(var(--ink-rgb), 0.24);
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  transition: transform 0.15s var(--ease-cube), background 0.2s, border-color 0.2s;
+}
+.rk-btn:hover:not(:disabled) { transform: translateY(-2px); border-color: var(--ink-60); }
+.rk-btn--go { background: var(--yellow); border-color: var(--yellow); color: var(--on-accent); }
+.rk-btn--go:hover:not(:disabled) { border-color: var(--yellow); }
+
+.rk-face:disabled,
+.rk-prime:disabled,
+.rk-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+@media (max-width: 520px) {
+  .rk-angle { display: none; }
+  /* one row only on phones, so the log never runs into the cube */
+  .rk-log { flex-wrap: nowrap; overflow: hidden; max-width: 78%; bottom: -4px; }
+  .rk-log li:nth-last-child(n + 6) { display: none; }
+  .rk-last { display: none; }
+  .rk-controls { justify-content: center; }
+  .rk-face, .rk-prime { min-width: 38px; padding: 0 8px; }
+}

@@ -1,0 +1,232 @@
+.tower {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: clamp(28px, 5vw, 72px);
+  align-items: center;
+}
+
+/* ---------- 3D stage ---------- */
+.tower__stage {
+  position: relative;
+  aspect-ratio: 1 / 1.05;
+  display: grid;
+  place-items: center;
+  perspective: 1500px;
+  perspective-origin: 50% 40%;
+  border: 1px solid rgba(var(--ink-rgb), 0.24);
+  border-radius: 6px;
+  background:
+    linear-gradient(var(--ink-08) 1px, transparent 1px) 0 0 / 32px 32px,
+    linear-gradient(90deg, var(--ink-08) 1px, transparent 1px) 0 0 / 32px 32px,
+    var(--paper-2);
+  box-shadow: var(--shadow-cube);
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  overflow: hidden;
+}
+.tower__stage.is-grabbing { cursor: grabbing; }
+
+.tower__scene {
+  position: relative;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.tower__floor {
+  position: absolute;
+  left: 50%;
+  bottom: 13%;
+  width: 52%;
+  height: 7%;
+  translate: -50% 0;
+  background: radial-gradient(ellipse at center, rgba(18, 18, 15, 0.24), transparent 70%);
+  filter: blur(6px);
+  pointer-events: none;
+}
+
+/* ---------- layers ---------- */
+.tl {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-style: preserve-3d;
+  transition: transform 0.6s var(--ease-cube);
+}
+
+/* ---------- blocks ---------- */
+.tc {
+  --top: var(--fill-top);
+  --side: var(--fill-side);
+  --shade: var(--fill-shade);
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-style: preserve-3d;
+  transition: transform 0.45s var(--ease-cube);
+}
+
+.tc--blue   { --top: var(--blue-lift); --side: var(--blue);   --shade: var(--blue-deep); }
+.tc--red    { --top: #FF6B52;          --side: var(--red);    --shade: var(--red-deep); }
+.tc--yellow { --top: #FFE27A;          --side: var(--yellow); --shade: var(--yellow-deep); }
+.tc--green  { --top: #3FCB6E;          --side: var(--green);  --shade: var(--green-deep); }
+
+.tc__face {
+  position: absolute;
+  inset: 0;
+  border: 1.5px solid var(--edge);
+  border-radius: 3px;
+  backface-visibility: hidden;
+  background: var(--side);
+  transition: filter 0.35s ease, background 0.3s ease;
+}
+.tc__face--top { background: var(--top); }
+.tc__face--bottom { background: var(--shade); }
+.tc__face--left,
+.tc__face--right { background: var(--shade); }
+
+/* skill blocks get a small inset bevel so they read as distinct from filler */
+.tc--blue .tc__face--top,
+.tc--red .tc__face--top,
+.tc--yellow .tc__face--top,
+.tc--green .tc__face--top {
+  box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.18);
+}
+
+/* "learning" layer: ghosted, still being built */
+.tc--ghost .tc__face {
+  background: rgba(39, 67, 227, 0.14);
+  border: 1.5px dashed var(--blue);
+}
+.tc--ghost .tc__face--top { background: rgba(39, 67, 227, 0.26); }
+.tc--ghost-fill .tc__face {
+  background: rgba(var(--ink-rgb), 0.03);
+  border: 1px dashed rgba(var(--ink-rgb), 0.22);
+}
+
+.tc.is-hot .tc__face { filter: brightness(1.12) saturate(1.1); }
+.tc.is-hot .tc__face--top { box-shadow: inset 0 0 0 4px var(--cube-white); }
+
+/* the focused layer slides out and its skill blocks get an ink outline */
+.tl.is-focus .tc--blue .tc__face,
+.tl.is-focus .tc--red .tc__face,
+.tl.is-focus .tc--yellow .tc__face,
+.tl.is-focus .tc--green .tc__face { border-width: 2px; border-color: var(--cube-white); }
+
+/* ---------- readout ---------- */
+.tower__readout {
+  position: absolute;
+  left: 16px;
+  bottom: 14px;
+  right: 16px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-40);
+  pointer-events: none;
+}
+.tower__readout b {
+  padding: 4px 9px;
+  background: var(--yellow);
+  color: var(--on-accent);
+  border-radius: 2px;
+  letter-spacing: 0.08em;
+}
+
+/* ---------- legend ---------- */
+.legend { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+
+.legend__row {
+  --tint: var(--blue);
+  padding: 14px 16px;
+  border: 1.5px solid var(--ink-14);
+  border-radius: 5px;
+  background: var(--paper);
+  transition: border-color 0.25s, transform 0.3s var(--ease-cube), box-shadow 0.3s var(--ease-cube);
+}
+.legend__row--red { --tint: var(--red); }
+.legend__row--yellow { --tint: var(--yellow); }
+.legend__row--green { --tint: var(--green); }
+.legend__row.is-focus {
+  border-color: rgba(var(--ink-rgb), 0.5);
+  transform: translate(-3px, -3px);
+  box-shadow: var(--shadow-cube-sm);
+}
+
+.legend__head { display: flex; align-items: center; gap: 10px; }
+.legend__swatch {
+  width: 13px;
+  height: 13px;
+  border: 1px solid rgba(var(--ink-rgb), 0.24);
+  background: var(--tint);
+  transform: rotate(45deg);
+  flex: none;
+}
+.legend__row--ghost .legend__swatch {
+  background: rgba(39, 67, 227, 0.2);
+  border: 1.5px dashed var(--blue);
+}
+.legend__title {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.legend__level {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--ink-40);
+}
+.legend__head { margin-bottom: 10px; }
+.legend__note {
+  margin: 4px 0 10px 23px;
+  font-size: 11.5px;
+  color: var(--ink-60);
+}
+
+.legend__chips {
+  list-style: none;
+  margin: 0 0 0 23px;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.legend__chip {
+  padding: 4px 9px;
+  border: 1px solid var(--ink-14);
+  border-radius: 3px;
+  background: var(--paper);
+  font-family: var(--mono);
+  font-size: 11px;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s var(--ease-cube);
+}
+.legend__chip:hover,
+.legend__chip.is-hot {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  transform: translateY(-2px);
+  box-shadow: 2px 2px 0 var(--tint);
+}
+.legend__row--ghost .legend__chip:hover,
+.legend__row--ghost .legend__chip.is-hot { box-shadow: 2px 2px 0 var(--blue); }
+
+@media (max-width: 900px) {
+  .tower { grid-template-columns: 1fr; }
+  .tower__stage { max-width: 520px; width: 100%; margin-inline: auto; aspect-ratio: 1 / 1.2; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tl, .tc { transition: none; }
+}

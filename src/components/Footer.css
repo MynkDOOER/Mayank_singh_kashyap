@@ -1,0 +1,158 @@
+.foot {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--ink-14);
+  padding-top: clamp(48px, 7vw, 84px);
+  background: rgba(var(--paper-rgb), 0.9);
+  overflow: hidden;
+}
+
+.foot__grid {
+  display: grid;
+  grid-template-columns: 1.4fr repeat(3, 0.85fr);
+  gap: clamp(26px, 4vw, 54px);
+}
+
+.foot__mark {
+  position: relative;
+  display: block;
+  width: 26px;
+  height: 26px;
+  margin-bottom: 16px;
+  transform-style: preserve-3d;
+  perspective: 220px;
+  transform: rotateX(-20deg) rotateY(-35deg); /* rests at a 3D angle; spins only on hover */
+}
+.foot__mark > i {
+  position: absolute;
+  inset: 0;
+  border: 1.4px solid var(--edge);
+  border-radius: 3px;
+  background: var(--blue);
+}
+.foot__mark > i:nth-child(1) { transform: translateZ(13px); }
+.foot__mark > i:nth-child(2) { transform: rotateY(180deg) translateZ(13px); background: #1B1B1B; }
+.foot__mark > i:nth-child(3) { transform: rotateY(90deg) translateZ(13px); background: var(--red); }
+.foot__mark > i:nth-child(4) { transform: rotateY(-90deg) translateZ(13px); background: var(--green); }
+.foot__mark > i:nth-child(5) { transform: rotateX(90deg) translateZ(13px); background: var(--yellow); }
+.foot__mark > i:nth-child(6) { transform: rotateX(-90deg) translateZ(13px); background: var(--cube-white); }
+
+.foot__name {
+  font-family: var(--display);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px;
+}
+.foot__blurb {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.75;
+  color: var(--ink-60);
+  max-width: 30ch;
+}
+
+.foot__col { display: flex; flex-direction: column; gap: 9px; }
+.foot__col h4 {
+  margin: 0 0 6px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red-text);
+}
+.foot__col a {
+  font-size: 12.5px;
+  color: var(--ink-60);
+  width: fit-content;
+  transition: color 0.2s, transform 0.2s var(--ease-cube);
+}
+.foot__col a:hover { color: var(--ink); transform: translateX(4px); }
+
+/* ---------- giant outlined wordmark ---------- */
+.foot__word {
+  position: relative;
+  display: grid;
+  margin: clamp(38px, 6vw, 70px) 0 0;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(74px, 21vw, 300px);
+  /* line-height 1 plus bottom padding keeps the descender of the "y"
+     inside the box, clear of the rule below */
+  line-height: 1;
+  letter-spacing: -0.045em;
+  text-align: center;
+  user-select: none;
+  cursor: default;
+}
+/* bottom padding gives both layers room for the tail of the "y", so the
+   cube fill (background-clip: text) reaches the descender too */
+.foot__word > span { grid-area: 1 / 1; padding-bottom: 0.24em; }
+
+.foot__word-line {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(var(--ink-rgb), 0.22);
+  transition: -webkit-text-stroke-color 0.4s ease;
+}
+
+.foot__word-fill {
+  color: transparent;
+  background-image: var(--tile);
+  background-size: var(--tw) var(--th);
+  -webkit-background-clip: text;
+          background-clip: text;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  animation: foot-roll 2.4s linear infinite;
+  animation-play-state: paused;
+  /* only a circle around the pointer shows the cubes; the rest stays outline */
+  -webkit-mask-image: radial-gradient(circle 0.9em at var(--fx, -999px) var(--fy, -999px), #000 55%, transparent 100%);
+          mask-image: radial-gradient(circle 0.9em at var(--fx, -999px) var(--fy, -999px), #000 55%, transparent 100%);
+}
+
+.foot__word:hover .foot__word-fill { opacity: 1; animation-play-state: running; }
+.foot__word:hover .foot__word-line { -webkit-text-stroke-color: rgba(var(--ink-rgb), 0.5); }
+
+/* one full tile diagonally, so the loop is seamless */
+@keyframes foot-roll {
+  from { background-position: 0 0; }
+  to   { background-position: var(--tw) var(--th); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .foot__word-fill { animation: none; }
+}
+
+.foot__base {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 20px 0 26px;
+  border-top: 1px solid var(--ink-14);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-40);
+}
+.foot__top { transition: color 0.2s; }
+.foot__top:hover { color: var(--blue); }
+
+@media (max-width: 860px) {
+  .foot__grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 520px) {
+  .foot__grid { grid-template-columns: 1fr; }
+  .foot__built { display: none; }
+}
+
+@media (pointer: coarse) {
+  .foot__top { min-height: 40px; display: inline-flex; align-items: center; }
+}
+
+@media (hover: hover) {
+  .foot__brand:hover .foot__mark { animation: mark-spin 2.4s linear infinite; }
+}

@@ -1,0 +1,88 @@
+html.has-cube-cursor,
+html.has-cube-cursor * { cursor: none !important; }
+
+.cursor-dot,
+.cursor-cube {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  display: none;
+}
+
+html.has-cube-cursor .cursor-dot,
+html.has-cube-cursor .cursor-cube { display: block; }
+
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  background: var(--ink);
+  border-radius: 50%;
+  
+}
+
+.cursor-cube {
+  perspective: 300px;
+  transition: opacity 0.25s ease;
+}
+.cursor-cube.is-gone { opacity: 0; }
+
+.cursor-cube__box {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  transform-style: preserve-3d;
+  scale: var(--k, 1);
+  transition: scale 0.3s var(--ease-cube);
+  /* the tumble runs on the compositor; JS only moves the cursor */
+  animation: cursor-spin 5s linear infinite;
+}
+
+.cursor-cube__box > span {
+  position: absolute;
+  inset: 0;
+  background: var(--blue);
+  border: 1px solid var(--edge);
+  opacity: 0.94;
+}
+.cursor-cube__box > span:nth-child(2) { background: var(--blue-deep); }
+.cursor-cube__box > span:nth-child(3) { background: var(--red); }
+.cursor-cube__box > span:nth-child(4) { background: var(--green); }
+.cursor-cube__box > span:nth-child(5) { background: var(--yellow); }
+.cursor-cube__box > span:nth-child(6) { background: var(--cube-white); }
+
+.cursor-cube.is-active .cursor-cube__box { --k: 1.85; }
+.cursor-cube.is-down .cursor-cube__box { --k: 0.7; }
+
+.cursor-cube::after {
+  content: attr(data-label);
+  position: absolute;
+  top: 22px;
+  left: 14px;
+  padding: 3px 7px;
+  background: var(--yellow);
+  color: var(--on-accent);
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border-radius: 2px;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.2s ease, transform 0.2s var(--ease-cube);
+}
+.cursor-cube.has-label::after { opacity: 1; transform: none; }
+
+@media (hover: none), (pointer: coarse) {
+  .cursor-dot, .cursor-cube { display: none !important; }
+}
+
+@keyframes cursor-spin {
+  from { transform: rotateX(-24deg) rotateY(0deg); }
+  to   { transform: rotateX(-24deg) rotateY(360deg); }
+}
