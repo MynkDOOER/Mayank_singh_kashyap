@@ -255,20 +255,20 @@ section[id] { scroll-margin-top: 68px; }
   transition: opacity .8s var(--ease-out), transform .8s var(--ease-out);
   transition-delay: var(--d, 0ms);
 }
-[data-reveal].in { opacity: 1; transform: none; }
+[data-reveal][data-revealed] { opacity: 1; transform: none; }
 
 [data-reveal='cube'] {
   opacity: 0;
   transform: perspective(700px) rotateX(-32deg) translate3d(0, 34px, -60px);
 }
-[data-reveal='cube'].in { opacity: 1; transform: perspective(700px) rotateX(0) translate3d(0,0,0); }
+[data-reveal='cube'][data-revealed] { opacity: 1; transform: perspective(700px) rotateX(0) translate3d(0,0,0); }
 
 /* On narrow screens a tilted full-width block projects wider than the
    viewport (even while invisible) and phones widen the page to fit it.
    Use a flat fade-up there instead. */
 @media (max-width: 760px) {
   [data-reveal='cube'] { transform: translate3d(0, 26px, 0); }
-  [data-reveal='cube'].in { transform: none; }
+  [data-reveal='cube'][data-revealed] { transform: none; }
 }
 
 /* ---------- focus ---------- */

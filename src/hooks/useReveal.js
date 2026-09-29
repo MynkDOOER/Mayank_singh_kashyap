@@ -9,7 +9,7 @@ export function useReveal() {
   useEffect(() => {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduced) {
-      document.querySelectorAll('[data-reveal]').forEach((el) => el.classList.add('in'));
+      document.querySelectorAll('[data-reveal]').forEach((el) => el.setAttribute('data-revealed', ''));
       return;
     }
 
@@ -17,7 +17,7 @@ export function useReveal() {
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
-            entry.target.classList.add('in');
+            entry.target.setAttribute('data-revealed', '');
             io.unobserve(entry.target);
           }
         }
@@ -26,7 +26,7 @@ export function useReveal() {
     );
 
     const scan = () =>
-      document.querySelectorAll('[data-reveal]:not(.in)').forEach((el) => io.observe(el));
+      document.querySelectorAll('[data-reveal]:not([data-revealed])').forEach((el) => io.observe(el));
 
     const raf = requestAnimationFrame(scan);
 
