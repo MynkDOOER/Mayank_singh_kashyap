@@ -64,17 +64,13 @@ export default function Hero() {
             <span className="hero__line" data-reveal style={{ '--d': '60ms' }}>
               Hi, I’m Mayank.
             </span>
-            <span className="hero__line hero__line--accent" data-reveal style={{ '--d': '140ms' }}>
-              I learn what the
-            </span>
-            <span className="hero__line" data-reveal style={{ '--d': '220ms' }}>
-              problem demands.
-            </span>
           </h1>
 
           <p className="lede hero__lede" data-reveal style={{ '--d': '320ms' }}>
-            I solve problems with what I know, and when I hit a gap, I learn what’s needed to
-            get past it.
+            I’m a full-stack developer focused on thoughtful UI,
+strong design systems, and high-performance software.
+I care about the details that make products feel intuitive,
+while keeping the engineering behind them fast and reliable.
           </p>
 
           <div className="hero__actions" data-reveal style={{ '--d': '400ms' }}>
