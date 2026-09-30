@@ -194,8 +194,7 @@ export default function Skills() {
             Tools and technologies<span className="ink-blue">.</span>
           </h2>
           <p className="lede sechead__lede">
-            Grouped by where they sit in an application, from tooling at the base to the interface
-            at the top.
+
           </p>
         </header>
 
