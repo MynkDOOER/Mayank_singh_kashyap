@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { NAV, PROFILE, PROJECTS } from '../data/site';
 import './Footer.css';
 
@@ -54,6 +55,18 @@ const trackPointer = (e) => {
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  const [isDark, setIsDark] = useState(() => document.documentElement.dataset.theme === 'dark');
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDark(document.documentElement.dataset.theme === 'dark');
+    });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <footer className="foot">
@@ -67,6 +80,18 @@ export default function Footer() {
             <p className="foot__blurb">
               Full-stack developer and computer science student.
             </p>
+            {isDark && (
+              <picture className="foot__scene">
+                <source media="(prefers-reduced-motion: reduce)" srcSet="/noir-rubik-still.png" type="image/png" />
+                <img
+                  src="/noir-rubik.gif"
+                  width="540"
+                  height="250"
+                  loading="lazy"
+                  alt="A noir figure holding a colorful Rubik's cube"
+                />
+              </picture>
+            )}
           </div>
 
           <nav className="foot__col" aria-label="Sections">

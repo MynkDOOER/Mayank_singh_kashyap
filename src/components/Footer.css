@@ -52,6 +52,21 @@
   max-width: 30ch;
 }
 
+.foot__scene {
+  display: block;
+  width: min(100%, 290px);
+  margin-top: 22px;
+  overflow: hidden;
+  border: 1px solid var(--ink-14);
+  border-radius: var(--radius);
+  background: #0B0B0B;
+}
+.foot__scene img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .foot__col { display: flex; flex-direction: column; gap: 9px; }
 .foot__col h4 {
   margin: 0 0 6px;
