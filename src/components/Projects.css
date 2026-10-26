@@ -95,6 +95,24 @@
 }
 .pcard--yellow .pcard__kind { background: var(--tint); color: var(--on-accent); }
 .pcard__year { right: 16px; top: 18px; color: var(--ink-40); }
+/* result badge, e.g. a hackathon placing */
+.pcard__award {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  z-index: 1;
+  padding: 4px 9px;
+  border: 1.5px solid var(--edge);
+  border-radius: 3px;
+  background: var(--yellow);
+  box-shadow: 2px 2px 0 var(--edge);
+  color: var(--on-accent);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
 
 /* ---------- cube (static; the card moves, not the cube) ---------- */
 .pcube {

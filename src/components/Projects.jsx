@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { PROJECTS } from '../data/site';
+import Recognition from './Recognition';
 import './Projects.css';
 
 const canTilt = () =>
@@ -63,9 +64,10 @@ function ProjectCard({ project, wide }) {
         <div className="pcard__visual">
           <span className="pcard__kind">{project.kind}</span>
           <span className="pcard__year">{project.year}</span>
+          {project.award && <span className="pcard__award">★ {project.award}</span>}
           <ProjectCube project={project} />
         </div>
-  
+
         <div className="pcard__body">
           <h3 className="pcard__title">{project.name}</h3>
           <p className="pcard__detail">{project.detail}</p>
@@ -98,6 +100,8 @@ export default function Projects() {
             <ProjectCard key={p.id} project={p} wide={odd && i === PROJECTS.length - 1} />
           ))}
         </div>
+
+        <Recognition />
       </div>
     </section>
   );
