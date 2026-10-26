@@ -115,6 +115,7 @@ export default function Footer() {
             <a href={PROFILE.links.github} target="_blank" rel="noreferrer noopener">GitHub</a>
             <a href={PROFILE.links.linkedin} target="_blank" rel="noreferrer noopener">LinkedIn</a>
             <a href={PROFILE.links.leetcode} target="_blank" rel="noreferrer noopener">LeetCode</a>
+            <a href={PROFILE.links.resume} target="_blank" rel="noreferrer noopener">Resume</a>
             <a href={`mailto:${PROFILE.email}`}>Email</a>
           </nav>
         </div>

@@ -2,12 +2,18 @@ import { useState } from 'react';
 
 const read = () => document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
 
+/* The fade is a View Transition: the browser snapshots the page once, switches
+   the theme instantly, and cross-fades the two snapshots on the GPU. Fading
+   each element with CSS transitions instead meant restyling ~900 elements on
+   every frame, which made the switch stutter. */
 const apply = (theme) => {
-  const root = document.documentElement;
-  root.classList.add('theme-fade');
-  root.dataset.theme = theme;
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#0B0B0B' : '#FBFBF9');
-  window.setTimeout(() => root.classList.remove('theme-fade'), 400);
+  const swap = () => {
+    document.documentElement.dataset.theme = theme;
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#0B0B0B' : '#FBFBF9');
+  };
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (document.startViewTransition && !reduced) document.startViewTransition(swap);
+  else swap();
 };
 
 export default function ThemeToggle() {

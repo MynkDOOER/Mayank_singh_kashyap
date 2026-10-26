@@ -100,6 +100,11 @@ while keeping the engineering behind them fast and reliable.
                 <i className="dot dot--yellow" />LeetCode
               </a>
             </li>
+            <li>
+              <a href={PROFILE.links.resume} target="_blank" rel="noreferrer noopener">
+                <i className="dot dot--green" />Resume
+              </a>
+            </li>
           </ul>
         </div>
 

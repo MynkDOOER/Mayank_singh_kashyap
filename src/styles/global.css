@@ -72,13 +72,11 @@
   color-scheme: dark;
 }
 
-/* brief colour cross-fade while switching themes (class added by the toggle) */
-html.theme-fade,
-html.theme-fade *,
-html.theme-fade *::before,
-html.theme-fade *::after {
-  transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease,
-    box-shadow 0.35s ease !important;
+/* theme switch: cross-fade of two page snapshots (started by ThemeToggle) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.35s;
+  animation-timing-function: ease;
 }
 
 *, *::before, *::after { box-sizing: border-box; }

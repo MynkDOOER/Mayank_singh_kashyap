@@ -13,6 +13,7 @@ export const PROFILE = {
     github: 'https://github.com/MynkDOOER',
     leetcode: 'https://leetcode.com/u/baddSp8jf1/',
     linkedin: 'https://www.linkedin.com/in/mayank-rooted/',
+    resume: 'https://drive.google.com/file/d/1M8vTQMYdkfM1QdsRRsj8LRHOehZdP-fp/view?usp=sharing',
   },
 };
 

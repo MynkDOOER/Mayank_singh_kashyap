@@ -55,6 +55,8 @@ export default function Contact() {
               <a href={PROFILE.links.linkedin} target="_blank" rel="noreferrer noopener">LinkedIn</a>
               <span>·</span>
               <a href={PROFILE.links.leetcode} target="_blank" rel="noreferrer noopener">LeetCode</a>
+              <span>·</span>
+              <a href={PROFILE.links.resume} target="_blank" rel="noreferrer noopener">Resume</a>
             </div>
           </div>
 
