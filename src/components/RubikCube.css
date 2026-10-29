@@ -216,6 +216,48 @@
 .rk-btn:hover:not(:disabled) { transform: translateY(-2px); border-color: var(--ink-60); }
 .rk-btn--go { background: var(--yellow); border-color: var(--yellow); color: var(--on-accent); }
 .rk-btn--go:hover:not(:disabled) { border-color: var(--yellow); }
+/* round play / back button, sitting on the panel's top-left corner */
+.rk-corner {
+  position: absolute;
+  top: -14px;
+  left: -14px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1.5px solid var(--edge);
+  border-radius: 50%;
+  background: var(--blue);
+  color: #fff;
+  box-shadow: 2px 2px 0 var(--shade);
+  cursor: pointer;
+  transition: transform 0.2s var(--ease-cube), box-shadow 0.2s var(--ease-cube), background 0.2s;
+}
+.rk-corner svg { width: 12px; height: 12px; }
+.rk-corner:hover:not(:disabled) { transform: scale(1.12); box-shadow: 3px 3px 0 var(--shade); }
+.rk-corner:active:not(:disabled) { transform: scale(0.94); box-shadow: 1px 1px 0 var(--shade); }
+.rk-corner:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
+.rk-corner:disabled { opacity: 0.45; cursor: not-allowed; }
+.rk-corner.is-playing { background: var(--paper); color: var(--ink); }
+/* a soft pulse so it reads as something to press */
+.rk-corner:not(.is-playing):not(:disabled)::after {
+  content: '';
+  position: absolute;
+  inset: -1.5px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 var(--blue);
+  animation: rk-ping 2.4s ease-out infinite;
+  pointer-events: none;
+}
+@keyframes rk-ping {
+  0% { box-shadow: 0 0 0 0 rgba(39, 67, 227, 0.5); }
+  70%, 100% { box-shadow: 0 0 0 9px rgba(39, 67, 227, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rk-corner::after { animation: none !important; }
+}
 
 .rk-face:disabled,
 .rk-prime:disabled,

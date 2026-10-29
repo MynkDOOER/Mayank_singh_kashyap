@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import CubeDash from './CubeDash';
 import './RubikCube.css';
 
 /* ------------------------------------------------------------------ *
@@ -156,6 +157,7 @@ export default function RubikCube() {
   const [prime, setPrime] = useState(false);
   const [mode, setMode] = useState('idle'); /* idle | turning | scrambling | solving */
   const [lastMove, setLastMove] = useState(null);
+  const [playing, setPlaying] = useState(false); /* Cube Dash mode */
 
   const histRef = useRef(startHist);
   const chain = useRef(Promise.resolve());
@@ -362,8 +364,35 @@ export default function RubikCube() {
   const busy = mode === 'scrambling' || mode === 'solving';
   const log = history.slice(-9);
 
+  const exitGame = () => {
+    setPlaying(false);
+    window.requestAnimationFrame(() => hostRef.current?.focus({ preventScroll: true }));
+  };
+
   return (
-    <div className="rubik" onKeyDown={onKeyDown}>
+    <>
+    {/* round button on the panel's top-left corner: play the game / back to the puzzle */}
+    <button
+      type="button"
+      className={`rk-corner${playing ? ' is-playing' : ''}`}
+      onClick={playing ? exitGame : () => setPlaying(true)}
+      disabled={!playing && mode !== 'idle'}
+      aria-label={playing ? 'Back to the puzzle' : 'Play Cube Dash, a jumping game on the cube'}
+      title={playing ? 'Back to puzzle' : 'Play Cube Dash'}
+    >
+      {playing ? (
+        <svg viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+      ) : (
+        <svg viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M5.5 3.5v9l7-4.5z" fill="currentColor" />
+        </svg>
+      )}
+    </button>
+    {playing && <CubeDash onExit={exitGame} />}
+    {/* the puzzle stays mounted while playing, so it keeps its state */}
+    <div className="rubik" onKeyDown={onKeyDown} style={playing ? { display: 'none' } : undefined}>
       {/* ---------- top bar ---------- */}
       <div className="rk-bar">
         <span className="rk-tag">3×3×3</span>
@@ -481,5 +510,6 @@ export default function RubikCube() {
         </div>
       </div>
     </div>
+    </>
   );
 }

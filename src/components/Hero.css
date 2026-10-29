@@ -145,7 +145,8 @@
   border: 1px solid var(--ink-40);
   background: var(--paper);
 }
-.hero__cube::before { top: -6px; left: -6px; }
+/* top-left corner is the round Play button (RubikCube .rk-corner) */
+.hero__cube::before { display: none; }
 .hero__cube::after { bottom: -6px; right: -6px; background: var(--yellow); }
 
 .hero__cubecap {
