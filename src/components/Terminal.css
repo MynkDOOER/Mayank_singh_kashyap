@@ -1,0 +1,90 @@
+/* ---------- interactive bits (base terminal styles live in Contact.css) ---------- */
+.term { cursor: text; }
+.term__body {
+  max-height: 340px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(244, 242, 234, 0.2) transparent;
+}
+.term__out.is-err { color: #FF7A63; }
+.term__out.is-good { color: var(--yellow); }
+
+.term__cmd--live {
+  display: flex;
+  align-items: center;
+  cursor: text;
+}
+.term__input {
+  min-width: 2ch;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: #F2F2EE;
+  caret-color: var(--yellow);
+  font: inherit;
+}
+/* the blinking block shows only while the terminal isn't focused */
+.term__cmd--live > b { margin-left: -1ch; }
+
+.term__hint {
+  margin-left: 12px;
+  font-style: normal;
+  font-size: 11px;
+  color: rgba(244, 242, 234, 0.32);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.term:hover .term__hint { opacity: 1; }
+@media (hover: none) { .term__hint { opacity: 1; } }
+
+/* ---------- `rm -rf /`: page shake, crash screen, reboot ---------- */
+/* shake the page content, not <body>: a transformed body would pin the
+   fixed crash screen to the top of the page instead of the viewport */
+html.is-panic .shell {
+  filter: saturate(0) contrast(1.6);
+  animation: panic-shake 0.5s steps(5) 3;
+}
+html.is-panic-still .shell { animation: none; }
+html.is-reboot .shell { animation: panic-boot 0.6s var(--ease-out); }
+@keyframes panic-shake {
+  0%   { transform: translate(0, 0); }
+  20%  { transform: translate(-8px, 3px) skewX(-1deg); }
+  40%  { transform: translate(7px, -4px); }
+  60%  { transform: translate(-5px, 2px) skewX(1deg); }
+  80%  { transform: translate(4px, -2px); }
+  100% { transform: translate(0, 0); }
+}
+@keyframes panic-boot {
+  from { opacity: 0; filter: blur(6px) brightness(2); }
+}
+
+.panic {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 max(24px, 10vw);
+  background: rgba(5, 5, 5, 0.94);
+  color: #6FD98F;
+  font-family: var(--mono);
+  font-size: clamp(12px, 1.4vw, 15px);
+  animation: panic-in 0.15s steps(2);
+}
+.panic p { margin: 0; opacity: 0; animation: panic-line 0.01s forwards; }
+.panic p:nth-child(1) { animation-delay: 0.1s; color: #FF7A63; }
+.panic p:nth-child(2) { animation-delay: 0.7s; }
+.panic p:nth-child(3) { animation-delay: 1.5s; color: var(--yellow); }
+.panic p:nth-child(4) { animation-delay: 2s; }
+.panic b { color: #fff; }
+.panic span { letter-spacing: -0.1em; }
+.panic__boot::after { content: '…'; animation: panic-dots 0.6s steps(3) infinite; }
+.panic.is-out { opacity: 0; transition: opacity 0.4s ease; }
+@keyframes panic-in { from { opacity: 0; } }
+@keyframes panic-line { to { opacity: 1; } }
+@keyframes panic-dots { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }

@@ -1,0 +1,61 @@
+/* ?debug overlay: outlines + labels sit above the page but never block clicks */
+.dbg { position: absolute; inset: 0 0 auto 0; z-index: 9000; pointer-events: none; }
+
+.dbg__box {
+  position: absolute;
+  outline: 1px dashed rgba(255, 0, 170, 0.75);
+  outline-offset: -1px;
+  background: rgba(255, 0, 170, 0.025);
+}
+.dbg__box.is-fixed { position: fixed; z-index: 9001; }
+
+.dbg__tag {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 2px 6px;
+  background: #ff00aa;
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.dbg__tag i { font-style: normal; font-weight: 400; opacity: 0.8; }
+
+.dbg__panel {
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  z-index: 9002;
+  min-width: 170px;
+  padding: 10px 12px;
+  border: 1px solid #ff00aa;
+  border-radius: 4px;
+  background: rgba(10, 10, 10, 0.88);
+  color: #c9c9c9;
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.7;
+  pointer-events: auto;
+}
+.dbg__panel p { margin: 0; }
+.dbg__panel b { color: #6fd98f; font-weight: 700; }
+.dbg__panel b.is-warn { color: #ffd12e; }
+.dbg__panel em { font-style: normal; color: #777; }
+.dbg__title { display: flex; align-items: center; gap: 6px; margin-bottom: 4px !important; color: #fff; }
+.dbg__title b { color: #ff00aa !important; animation: dbg-blink 1.2s steps(2) infinite; }
+.dbg__title button {
+  margin-left: auto;
+  padding: 0 6px;
+  border: 1px solid #555;
+  border-radius: 3px;
+  color: #ddd;
+  font-size: 10px;
+  cursor: pointer;
+}
+.dbg__title button:hover { border-color: #ff00aa; color: #fff; }
+@keyframes dbg-blink { 50% { opacity: 0.2; } }
+
+@media print { .dbg { display: none !important; } }

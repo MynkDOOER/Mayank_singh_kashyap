@@ -8,6 +8,8 @@ import About from './components/About';
 import Skills from './components/Skills';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import PrintResume from './components/PrintResume';
+import DebugOverlay from './components/DebugOverlay';
 import { useReveal } from './hooks/useReveal';
 import './App.css';
 
@@ -48,6 +50,9 @@ export default function App() {
         </main>
         <Footer />
       </div>
+
+      <PrintResume />
+      <DebugOverlay />
     </>
   );
 }

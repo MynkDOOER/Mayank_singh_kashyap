@@ -1,14 +1,8 @@
 import { useState } from 'react';
 import { PROFILE } from '../data/site';
 import { useMagnetic } from '../hooks/useMagnetic';
+import Terminal from './Terminal';
 import './Contact.css';
-
-const LINES = [
-  { cmd: 'whoami', out: 'mayank singh kashyap' },
-  { cmd: 'cat focus.txt', out: 'full-stack web development' },
-  { cmd: 'ls ~/projects', out: 'verdikt  resolverhub  shrink-this  bookipedia  wiseroom' },
-  { cmd: 'cat approach.txt', out: 'use what I know, learn what I don’t' },
-];
 
 export default function Contact() {
   const [copied, setCopied] = useState(false);
@@ -61,25 +55,7 @@ export default function Contact() {
           </div>
 
           <div className="panel__right">
-            <div className="term">
-              <div className="term__bar">
-                <i /><i /><i />
-                <span>mayank@dev: ~</span>
-              </div>
-              <div className="term__body">
-                {LINES.map((l) => (
-                  <div className="term__line" key={l.cmd}>
-                    <p className="term__cmd">
-                      <span>$</span> {l.cmd}
-                    </p>
-                    <p className="term__out">{l.out}</p>
-                  </div>
-                ))}
-                <p className="term__cmd term__cmd--live">
-                  <span>$</span> <b />
-                </p>
-              </div>
-            </div>
+            <Terminal />
           </div>
         </div>
       </div>
